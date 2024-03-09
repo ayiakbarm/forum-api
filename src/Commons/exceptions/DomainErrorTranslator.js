@@ -19,13 +19,13 @@ DomainErrorTranslator._directories = {
   'REGISTER_USER.USERNAME_CONTAIN_RESTRICTED_CHARACTER': new InvariantError(
     'tidak dapat membuat user baru karena username mengandung karakter terlarang'
   ),
-  'NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
+  'ADD_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
     'tidak dapat membuat thread baru karena properti yang dibutuhkan tidak ada'
   ),
-  'NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
+  'ADD_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
     'tidak dapat membuat thread baru karena tipe data tidak sesuai'
   ),
-  'NEW_THREAD.TITLE_LIMIT_CHARACTERS': new InvariantError(
+  'ADD_THREAD.TITLE_LIMIT_CHARACTERS': new InvariantError(
     'tidak dapat membuat thread baru karena karakter title melebihi batas limit'
   ),
   'USER_LOGIN.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
