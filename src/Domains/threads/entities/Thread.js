@@ -10,18 +10,12 @@ class Thread {
     this.date = date;
   }
 
-  _verifyPayload({ id, title, body, owner, date }) {
-    if (!id || !title || !body || !owner || !date) {
+  _verifyPayload({ id, title, owner }) {
+    if (!id || !title || !owner) {
       throw new Error('THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (
-      typeof id !== 'string' ||
-      typeof title !== 'string' ||
-      typeof body !== 'string' ||
-      typeof owner !== 'string' ||
-      typeof date === 'number'
-    ) {
+    if (typeof id !== 'string' || typeof title !== 'string' || typeof owner !== 'string') {
       throw new Error('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
