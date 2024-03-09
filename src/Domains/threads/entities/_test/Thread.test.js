@@ -35,7 +35,7 @@ describe('Thread entities', () => {
       title: 'Best of Dicoding course',
       body: 'this is how you can get',
       owner: 'user-123',
-      date: Date.now(),
+      date: new Date().toISOString(),
     };
 
     // Action

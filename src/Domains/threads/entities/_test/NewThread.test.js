@@ -16,6 +16,7 @@ describe('NewThread entities', () => {
     const payload = {
       title: true,
       body: 123,
+      owner: {},
     };
 
     // Action & Assert
@@ -30,6 +31,7 @@ describe('NewThread entities', () => {
       title:
         'DicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesomeDicodingAreAwesome',
       body: 'Dicoding Indonesia',
+      owner: 'user-001',
     };
 
     // Action & Assert
@@ -41,6 +43,7 @@ describe('NewThread entities', () => {
     const payload = {
       title: 'Dicoding The Best',
       body: 'Dicoding Awesome as always',
+      owner: 'user-001',
     };
 
     // Action
