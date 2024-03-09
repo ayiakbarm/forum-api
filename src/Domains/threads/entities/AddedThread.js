@@ -1,4 +1,4 @@
-class Thread {
+class AddedThread {
   constructor(payload) {
     this._verifyPayload(payload);
     const { id, title, body, owner, date } = payload;
@@ -21,4 +21,4 @@ class Thread {
   }
 }
 
-module.exports = Thread;
+module.exports = AddedThread;

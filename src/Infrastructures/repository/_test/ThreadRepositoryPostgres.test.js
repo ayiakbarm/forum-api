@@ -1,4 +1,4 @@
-const NewThread = require('../../../Domains/threads/entities/NewThread');
+const AddThread = require('../../../Domains/threads/entities/AddThread');
 const pool = require('../../database/postgres/pool');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
@@ -19,7 +19,7 @@ describe('ThreadRepositoryPostgres', () => {
     it('should persist add new thread and return the thread that create before correctly', async () => {
       // Arrange
       await UsersTableTestHelper.addUser({ id: 'user-123', username: 'user12345' });
-      const newThread = new NewThread({
+      const newThread = new AddThread({
         title: 'Dicoding Awesome',
         body: 'This is the best course ever.',
         owner: 'user-123',

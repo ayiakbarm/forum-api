@@ -1,6 +1,6 @@
-const NewThread = require('../NewThread');
+const AddThread = require('../AddThread');
 
-describe('NewThread entities', () => {
+describe('AddThread entities', () => {
   it('should throw error when payload not contain needed property', () => {
     // Arrange
     const payload = {
@@ -8,7 +8,7 @@ describe('NewThread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+    expect(() => new AddThread(payload)).toThrowError('NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
   });
 
   it('should throw error when payload did not meet data type specification', () => {
@@ -20,7 +20,7 @@ describe('NewThread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new NewThread(payload)).toThrowError(
+    expect(() => new AddThread(payload)).toThrowError(
       'NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
@@ -35,10 +35,10 @@ describe('NewThread entities', () => {
     };
 
     // Action & Assert
-    expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.TITLE_LIMIT_CHARACTERS');
+    expect(() => new AddThread(payload)).toThrowError('NEW_THREAD.TITLE_LIMIT_CHARACTERS');
   });
 
-  it('should create newThread object correctly', () => {
+  it('should create addThread object correctly', () => {
     // Arrange
     const payload = {
       title: 'Dicoding The Best',
@@ -47,7 +47,7 @@ describe('NewThread entities', () => {
     };
 
     // Action
-    const { title, body } = new NewThread(payload);
+    const { title, body } = new AddThread(payload);
 
     // Assert
     expect(title).toEqual(payload.title);

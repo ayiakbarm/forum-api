@@ -1,5 +1,5 @@
 const AddThreadUseCase = require('../AddThreadUseCase');
-const Thread = require('../../../Domains/threads/entities/Thread');
+const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 
 describe('AddThreadUseCase', () => {
@@ -10,7 +10,7 @@ describe('AddThreadUseCase', () => {
       body: 'Dicoding are awesome',
       owner: 'owner-123',
     };
-    const mockThread = new Thread({
+    const mockThread = new AddedThread({
       id: 'thread-123',
       title: useCasePayload.title,
       body: useCasePayload.body,
@@ -37,7 +37,7 @@ describe('AddThreadUseCase', () => {
     // Assert
     expect(mockThreadRepository.addThread).toBeCalledWith(useCasePayload);
     expect(addedThread).toStrictEqual(
-      new Thread({
+      new AddedThread({
         id: 'thread-123',
         title: useCasePayload.title,
         body: useCasePayload.body,
