@@ -13,6 +13,7 @@ describe('AddComment entity', () => {
     // Arrange
     const payload = {
       content: true,
+      owner: 'user-123',
     };
 
     // Action & Assert
@@ -25,12 +26,14 @@ describe('AddComment entity', () => {
     // Arrange
     const payload = {
       content: 'siapa yang mau beli cilok?',
+      owner: 'user-123',
     };
 
     // Action
-    const { content } = new AddComment(payload);
+    const { content, owner } = new AddComment(payload);
 
     // Assert
     expect(content).toEqual(payload.content);
+    expect(owner).toEqual(payload.owner);
   });
 });
