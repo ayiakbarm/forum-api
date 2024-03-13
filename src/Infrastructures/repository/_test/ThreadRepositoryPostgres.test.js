@@ -2,6 +2,7 @@ const AddThread = require('../../../Domains/threads/entities/AddThread');
 const pool = require('../../database/postgres/pool');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
@@ -34,6 +35,19 @@ describe('ThreadRepositoryPostgres', () => {
       // Assert
       const thread = await ThreadsTableTestHelper.findThreadById('thread-123');
       expect(thread).toHaveLength(1);
+    });
+  });
+
+  describe('checkThreadExist function', () => {
+    it('should throw error NotFoundError when thread are not found/available', async () => {
+      // Arrange
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+      const threadId = 'abc';
+
+      // Action & Assert
+      await expect(threadRepositoryPostgres.checkThreadExist(threadId)).rejects.toThrow(
+        NotFoundError
+      );
     });
   });
 });

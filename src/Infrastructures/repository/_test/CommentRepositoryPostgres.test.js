@@ -25,7 +25,6 @@ describe('CommentRepositoryPostgres interface', () => {
       });
       const fakeIdGenerator = () => '123';
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
-      console.log('newComment', newComment);
 
       // Action
       await commentRepositoryPostgres.addComment(newComment);
