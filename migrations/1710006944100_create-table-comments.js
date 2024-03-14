@@ -16,6 +16,14 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       notNull: true,
     },
+    created_at: {
+      type: 'TIMESTAMPTZ',
+      notNull: true,
+      default: pgm.func('now()'),
+    },
+    updated_at: {
+      type: 'TIMESTAMPTZ',
+    },
   });
 
   pgm.createIndex('comments', 'owner');

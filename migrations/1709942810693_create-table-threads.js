@@ -20,10 +20,13 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       notNull: true,
     },
-    date: {
+    created_at: {
       type: 'TIMESTAMPTZ',
       notNull: true,
       default: pgm.func('now()'),
+    },
+    updated_at: {
+      type: 'TIMESTAMPTZ',
     },
   });
   // add foreign key to owner

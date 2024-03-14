@@ -14,6 +14,7 @@ describe('AddComment entity', () => {
     const payload = {
       content: true,
       owner: 'user-123',
+      thread: {},
     };
 
     // Action & Assert
@@ -27,6 +28,7 @@ describe('AddComment entity', () => {
     const payload = {
       content: 'siapa yang mau beli cilok?',
       owner: 'user-123',
+      thread: 'thread-123',
     };
 
     // Action

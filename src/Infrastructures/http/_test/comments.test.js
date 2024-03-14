@@ -78,6 +78,7 @@ describe('/comments endpoint', () => {
       });
       const responseThreadJson = JSON.parse(responseThread.payload);
 
+      console.log('responseThreadJson', responseThreadJson);
       // Action
       const response = await server.inject({
         method: 'POST',
