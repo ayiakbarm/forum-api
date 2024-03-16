@@ -9,10 +9,10 @@ const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 describe('ThreadRepositoryPostgres', () => {
   afterEach(async () => {
     await ThreadsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
-    await UsersTableTestHelper.cleanTable();
     await pool.end();
   });
 
@@ -38,16 +38,28 @@ describe('ThreadRepositoryPostgres', () => {
     });
   });
 
-  describe('checkThreadExist function', () => {
+  describe('checkAvailabilityThread function', () => {
     it('should throw error NotFoundError when thread are not found/available', async () => {
       // Arrange
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
       const threadId = 'abc';
 
       // Action & Assert
-      await expect(threadRepositoryPostgres.checkThreadExist(threadId)).rejects.toThrow(
+      await expect(threadRepositoryPostgres.checkAvailabilityThread(threadId)).rejects.toThrow(
         NotFoundError
       );
+    });
+
+    it('should not throw error NotFoundError when thread are exist in database', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      await ThreadsTableTestHelper.addThread({ title: 'sebuah thread' });
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(
+        threadRepositoryPostgres.checkAvailabilityThread('thread-123')
+      ).resolves.not.toThrow(NotFoundError);
     });
   });
 });
