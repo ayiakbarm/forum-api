@@ -2,6 +2,7 @@ const AddThread = require('../../../Domains/threads/entities/AddThread');
 const pool = require('../../database/postgres/pool');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
@@ -10,6 +11,7 @@ describe('ThreadRepositoryPostgres', () => {
   afterEach(async () => {
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
@@ -60,6 +62,34 @@ describe('ThreadRepositoryPostgres', () => {
       await expect(
         threadRepositoryPostgres.checkAvailabilityThread('thread-123')
       ).resolves.not.toThrow(NotFoundError);
+    });
+  });
+
+  describe('getDetailThread function', () => {
+    it('should get detail thread when given right payload', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123',
+        title: 'sebuah thread',
+        body: 'lorem ipsum dolor sit amet',
+        created_at: new Date().toISOString(),
+        owner: 'user-123',
+      });
+      await CommentsTableTestHelper.addComment({ content: 'sebuah comment' });
+      await CommentsTableTestHelper.addComment({ id: 'comment-abc', content: 'sebuah comment' });
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
+
+      // Action
+      const detailThread = await threadRepositoryPostgres.getDetailThread('thread-123');
+
+      // Assert
+      expect(detailThread.id).toEqual('thread-123');
+      expect(detailThread.title).toEqual('sebuah thread');
+      expect(detailThread.body).toEqual('lorem ipsum dolor sit amet');
+      expect(detailThread.username).toEqual('dicoding');
+      expect(detailThread.comments).toHaveLength(2);
+      expect(detailThread.comments[0].id).toEqual('comment-123');
     });
   });
 });
