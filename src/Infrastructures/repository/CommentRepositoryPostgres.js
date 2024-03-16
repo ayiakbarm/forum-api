@@ -34,7 +34,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     const result = await this._pool.query(query);
 
-    if (result.rowCount === 0) throw new NotFoundError('thread not found in database');
+    if (result.rowCount === 0) throw new NotFoundError('comment not found in database');
   }
 
   async verifyCommentOwner(payload) {

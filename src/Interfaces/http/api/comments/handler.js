@@ -42,8 +42,6 @@ class CommentsHandler {
       commentId,
     };
 
-    console.log('usecasepayload', useCasePayload);
-
     await deleteCommentUseCase.execute(useCasePayload);
 
     const response = h.response({

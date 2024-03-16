@@ -118,7 +118,6 @@ describe('CommentRepositoryPostgres interface', () => {
   describe('deleteComment function', () => {
     it('should delete comment from database', async () => {
       // Arrange
-      // Arrange
       await UsersTableTestHelper.addUser({ username: 'dicoding' });
       await ThreadsTableTestHelper.addThread({ title: 'sebuah title', body: 'lorem ipsum dolor' });
       await CommentsTableTestHelper.addComment({
