@@ -25,8 +25,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     return new AddedComment({ ...result.rows[0] });
   }
 
-  async checkAvailabilityComment(payload) {
-    const { commentId } = payload;
+  async checkAvailabilityComment(commentId) {
     const query = {
       text: 'SELECT * FROM comments WHERE id = $1',
       values: [commentId],
@@ -37,8 +36,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (result.rowCount === 0) throw new NotFoundError('comment not found in database');
   }
 
-  async verifyCommentOwner(payload) {
-    const { commentId, owner } = payload;
+  async verifyCommentOwner(commentId, owner) {
     const query = {
       text: 'SELECT * FROM comments WHERE id = $1 AND owner = $2',
       values: [commentId, owner],
@@ -47,7 +45,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     const result = await this._pool.query(query);
 
     if (result.rowCount === 0)
-      throw new AuthorizationError('user not authorized to access this comment');
+      throw new AuthorizationError('user not authorized to delete this comment');
   }
 
   async deleteComment(payload) {
