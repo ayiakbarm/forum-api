@@ -15,7 +15,7 @@ class CommentRepliesRepositoryPostgres extends CommentRepliesRepository {
     const updatedAt = createdAt;
 
     const query = {
-      text: 'INSERT INTO comment_replies VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id, content, owner',
+      text: 'INSERT INTO comment_replies VALUES($1, $2, $3, $4, $5, $6, $7, false) RETURNING id, content, owner',
       values: [id, content, owner, comment, thread, createdAt, updatedAt],
     };
     const result = await this._pool.query(query);

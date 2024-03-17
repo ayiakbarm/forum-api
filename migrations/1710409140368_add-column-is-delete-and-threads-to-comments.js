@@ -27,4 +27,6 @@ exports.up = (pgm) => {
 
 exports.down = (pgm) => {
   pgm.dropConstraint('comments', 'fk_thread_comments');
+  pgm.dropColumn('comments', 'is_delete');
+  pgm.dropColumn('comments', 'thread');
 };

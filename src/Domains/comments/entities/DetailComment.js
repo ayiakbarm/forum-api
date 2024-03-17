@@ -1,11 +1,11 @@
 class DetailComment {
   constructor(payload) {
-    this._verifyPayload(payload);
+    this._validatePayload(payload);
     const comments = this._remappingPayload(payload);
     this.comments = comments;
   }
 
-  _verifyPayload({ comments }) {
+  _validatePayload({ comments }) {
     if (!comments) throw new Error('DETAIL_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
     if (!Array.isArray(comments))
       throw new Error('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
