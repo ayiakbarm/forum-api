@@ -151,7 +151,7 @@ describe('CommentRepositoryPostgres interface', () => {
       const commentId = 'comment-123';
 
       // Action
-      await commentRepositoryPostgres.deleteComment({ commentId });
+      await commentRepositoryPostgres.deleteComment(commentId);
 
       // Assert
       const comment = await CommentsTableTestHelper.findCommentById(commentId);
