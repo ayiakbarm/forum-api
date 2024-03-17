@@ -291,9 +291,9 @@ describe('/threads endpoint', () => {
 
       await server.inject({
         method: 'POST',
-        url: `/threads/${threadResponseJson.data.addedThread.id}/comments`,
+        url: `/threads/${threadResponseJson.data.addedThread.id}/comments/${commentResponseJson.data.addedComment.id}/replies`,
         payload: {
-          content: 'sebuah comment 123',
+          content: 'sebuah komen balikan',
         },
         headers: { authorization: `Bearer ${responseAuthJson.data.accessToken}` },
       });

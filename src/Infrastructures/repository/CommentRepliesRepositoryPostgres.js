@@ -22,16 +22,16 @@ class CommentRepliesRepositoryPostgres extends CommentRepliesRepository {
     return new AddedReply({ ...result.rows[0] });
   }
 
-  async getDetailReplyComment(thread) {
+  async getDetailReplyComment(comment) {
     const query = {
       text: `
       SELECT comment_replies.id, content, created_at as date, username, is_delete
       FROM comment_replies
       LEFT JOIN users ON users.id = comment_replies.owner
-      WHERE thread = $1
+      WHERE comment = $1
       ORDER BY created_at ASC
       `,
-      values: [thread],
+      values: [comment],
     };
 
     const result = await this._pool.query(query);

@@ -65,8 +65,9 @@ describe('CommentRepliesRepositoryPostgres interface', () => {
 
       // Action
       const detailReplyComment = await commentRepliesRepositoryPostgres.getDetailReplyComment(
-        'thread-123'
+        'comment-123'
       );
+      console.log(detailReplyComment);
 
       // Assert
       expect(Array.isArray(detailReplyComment)).toBe(true);

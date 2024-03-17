@@ -11,7 +11,14 @@ class GetDetailThreadUseCase {
     await this._threadRepository.checkAvailabilityThread(thread);
     const detailThread = await this._threadRepository.getDetailThread(thread);
     const getCommentsThread = await this._commentRepository.getDetailCommentThread(thread);
-    const getRepliesComments = await this._commentRepliesRepository.getDetailReplyComment(thread);
+    const getRepliesComments = await Promise.all(
+      getCommentsThread.map(async (comment) => {
+        const tempReplyComments = await this._commentRepliesRepository.getDetailReplyComment(
+          comment.id
+        );
+        return tempReplyComments;
+      })
+    );
 
     const updatedCommentsThread = this._groupRepliesWithComments(
       getCommentsThread,
@@ -19,7 +26,6 @@ class GetDetailThreadUseCase {
     );
 
     detailThread.comments = updatedCommentsThread;
-
     return detailThread;
   }
 
@@ -32,15 +38,10 @@ class GetDetailThreadUseCase {
 
   _groupRepliesWithComments(getCommentsThread, getRepliesComments) {
     const commentsWithReplies = {};
-    getCommentsThread.forEach((comment) => {
+    getCommentsThread.forEach((comment, index) => {
       if (!commentsWithReplies[comment.id]) {
-        commentsWithReplies[comment.id] = { ...comment, replies: [] };
+        commentsWithReplies[comment.id] = { ...comment, replies: getRepliesComments[index] || [] };
       }
-      getRepliesComments.forEach((reply) => {
-        if (reply.thread === comment.thread) {
-          commentsWithReplies[comment.id].replies.push(reply);
-        }
-      });
     });
 
     const updatedCommentsThread = Object.values(commentsWithReplies);
