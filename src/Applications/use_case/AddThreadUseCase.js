@@ -6,17 +6,8 @@ class AddThreadUseCase {
   }
 
   async execute(useCasePayload) {
-    this._validatePayload(useCasePayload);
     const newThread = new AddThread(useCasePayload);
     return this._threadRepository.addThread(newThread);
-  }
-
-  _validatePayload({ title, body, owner }) {
-    if (!title || !body || !owner)
-      throw new Error('ADD_THREAD_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY');
-
-    if (typeof title !== 'string' || typeof body !== 'string' || typeof owner !== 'string')
-      throw new Error('ADD_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION');
   }
 }
 

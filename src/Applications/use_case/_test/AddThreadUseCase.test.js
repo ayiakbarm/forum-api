@@ -3,47 +3,6 @@ const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 
 describe('AddThreadUseCase', () => {
-  it('should throw an error when payload not contain needed property', async () => {
-    // Arrange
-    const useCasePayload = {
-      title: 'dicoding',
-      body: 'Dicoding are awesome',
-    };
-    /** creating dependency for use case */
-    const mockThreadRepository = new ThreadRepository();
-
-    /** creating use case instance */
-    const addThreadUseCase = new AddThreadUseCase({
-      threadRepository: mockThreadRepository,
-    });
-
-    // Action & Assert
-    await expect(addThreadUseCase.execute(useCasePayload)).rejects.toThrowError(
-      'ADD_THREAD_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY'
-    );
-  });
-
-  it('should throw an error when payload not meet data type specification', async () => {
-    // Arrange
-    const useCasePayload = {
-      title: true,
-      body: {},
-      owner: 'user-123',
-    };
-    /** creating dependency for use case */
-    const mockThreadRepository = new ThreadRepository();
-
-    /** creating use case instance */
-    const addThreadUseCase = new AddThreadUseCase({
-      threadRepository: mockThreadRepository,
-    });
-
-    // Action & Assert
-    await expect(addThreadUseCase.execute(useCasePayload)).rejects.toThrowError(
-      'ADD_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION'
-    );
-  });
-
   it('should orchestrating add threads use case correctly', async () => {
     // Arrange
     const useCasePayload = {
