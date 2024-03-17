@@ -131,8 +131,8 @@ describe('CommentRepositoryPostgres interface', () => {
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       // Action
-      const detailComment = await commentRepositoryPostgres.getDetailComment('user-123');
-
+      const detailComment = await commentRepositoryPostgres.getDetailCommentThread('thread-123');
+      console.log('detailComment', detailComment);
       // Assert
       expect(detailComment[0].id).toEqual('comment-123');
       expect(detailComment[0].username).toEqual('dicoding');

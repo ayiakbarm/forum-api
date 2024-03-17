@@ -3,6 +3,50 @@ const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const DeleteCommentUseCase = require('../DeleteCommentUseCase');
 
 describe('DeleteCommentUseCase', () => {
+  it('should throw an error when payload not contain needed property', async () => {
+    // Arrange
+    const useCasePayload = {
+      thread: true,
+      commentId: {},
+    };
+    /** creating dependency for use case */
+    const mockThreadRepository = new ThreadRepository();
+    const mockCommentRepository = new CommentRepository();
+
+    /** creating use case instance */
+    const deleteCommentUseCase = new DeleteCommentUseCase({
+      commentRepository: mockCommentRepository,
+      threadRepository: mockThreadRepository,
+    });
+
+    // Action & Assert
+    await expect(deleteCommentUseCase.execute(useCasePayload)).rejects.toThrowError(
+      'DELETE_COMMENT_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY'
+    );
+  });
+
+  it('should throw an error when payload not meet data type specification', async () => {
+    // Arrange
+    const useCasePayload = {
+      thread: true,
+      commentId: {},
+      owner: 'hello world',
+    };
+    /** creating dependency for use case */
+    const mockThreadRepository = new ThreadRepository();
+    const mockCommentRepository = new CommentRepository();
+
+    /** creating use case instance */
+    const deleteCommentUseCase = new DeleteCommentUseCase({
+      commentRepository: mockCommentRepository,
+      threadRepository: mockThreadRepository,
+    });
+
+    // Action & Assert
+    await expect(deleteCommentUseCase.execute(useCasePayload)).rejects.toThrowError(
+      'DELETE_COMMENT_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION'
+    );
+  });
   it('should orchestrating delete comment correctly', async () => {
     // Arrange
     const useCasePayload = {
