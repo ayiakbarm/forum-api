@@ -20,6 +20,10 @@ exports.up = (pgm) => {
       type: 'VARCHAR(50)',
       notNull: true,
     },
+    thread: {
+      type: 'VARCHAR(50)',
+      notNull: true,
+    },
     created_at: {
       type: 'TIMESTAMPTZ',
       notNull: true,
@@ -47,10 +51,20 @@ exports.up = (pgm) => {
       onDelete: 'CASCADE',
     },
   });
+
+  pgm.createIndex('comment_replies', 'thread');
+  pgm.addConstraint('comment_replies', 'fk_thread_comment_replies', {
+    foreignKeys: {
+      columns: 'thread',
+      references: 'threads(id)',
+      onDelete: 'CASCADE',
+    },
+  });
 };
 
 exports.down = (pgm) => {
   pgm.dropConstraint('comment_replies', 'fk_owner_comment_replies');
   pgm.dropConstraint('comment_replies', 'fk_comment_comment_replies');
+  pgm.dropConstraint('comment_replies', 'fk_thread_comment_replies');
   pgm.dropTable('comment_replies');
 };

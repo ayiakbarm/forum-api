@@ -29,6 +29,7 @@ describe('CommentRepliesRepositoryPostgres interface', () => {
         content: 'sebuah balasan komen',
         owner: 'user-123',
         comment: 'comment-123',
+        thread: 'thread-123',
       });
 
       const fakeIdGenerator = () => '123';

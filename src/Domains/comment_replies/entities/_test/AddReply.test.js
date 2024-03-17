@@ -15,6 +15,7 @@ describe('AddReply entity', () => {
       content: 'sebuah reply balasan',
       owner: true,
       comment: {},
+      thread: 'thread-123',
     };
 
     // Action & Assert
@@ -26,14 +27,16 @@ describe('AddReply entity', () => {
       content: 'sebuah reply balasan',
       owner: 'user-123',
       comment: 'comment-123',
+      thread: 'thread-123',
     };
 
     // Action
-    const { content, owner, comment } = new AddReply(payload);
+    const { content, owner, comment, thread } = new AddReply(payload);
 
     // Assert
     expect(content).toEqual(payload.content);
     expect(owner).toEqual(payload.owner);
     expect(comment).toEqual(payload.comment);
+    expect(thread).toEqual(payload.thread);
   });
 });
