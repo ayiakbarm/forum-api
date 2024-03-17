@@ -112,34 +112,6 @@ describe('CommentRepositoryPostgres interface', () => {
     });
   });
 
-  describe('getDetailComment function', () => {
-    it('should return detail comment when given right payload', async () => {
-      // Arrange
-      await UsersTableTestHelper.addUser({ username: 'dicoding' });
-      await ThreadsTableTestHelper.addThread({ title: 'sebuah title', body: 'lorem ipsum dolor' });
-      await CommentsTableTestHelper.addComment({
-        id: 'comment-123',
-        owner: 'user-123',
-        thread: 'thread-123',
-      });
-      await CommentsTableTestHelper.addComment({
-        id: 'comment-abc',
-        owner: 'user-123',
-        thread: 'thread-123',
-      });
-
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-
-      // Action
-      const detailComment = await commentRepositoryPostgres.getDetailCommentThread('thread-123');
-      console.log('detailComment', detailComment);
-      // Assert
-      expect(detailComment[0].id).toEqual('comment-123');
-      expect(detailComment[0].username).toEqual('dicoding');
-      expect(detailComment[0].content).toEqual('sebuah comment');
-    });
-  });
-
   describe('deleteComment function', () => {
     it('should delete comment from database', async () => {
       // Arrange

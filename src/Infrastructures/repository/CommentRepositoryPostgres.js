@@ -48,21 +48,6 @@ class CommentRepositoryPostgres extends CommentRepository {
       throw new AuthorizationError('user not authorized to delete this comment');
   }
 
-  async getDetailCommentThread(thread) {
-    const query = {
-      text: `
-      SELECT comments.id, username, created_at as date, content, is_delete
-      FROM comments
-      LEFT JOIN users ON users.id = comments.owner
-      WHERE thread = $1`,
-      values: [thread],
-    };
-
-    const result = await this._pool.query(query);
-
-    return result.rows;
-  }
-
   async deleteComment(payload) {
     const { commentId } = payload;
     const query = {
