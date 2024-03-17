@@ -13,9 +13,7 @@ class GetDetailThreadUseCase {
     const detailThread = await this._threadRepository.getDetailThread(thread);
     const getCommentsThread = await this._commentRepository.getDetailCommentThread(thread);
     detailThread.comments = new DetailComment({ comments: getCommentsThread }).comments;
-    return {
-      thread: detailThread,
-    };
+    return detailThread;
   }
 
   _validatePayload({ thread }) {

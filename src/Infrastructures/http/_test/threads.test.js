@@ -1,5 +1,6 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const container = require('../../container');
 const createServer = require('../createServer');
@@ -12,6 +13,7 @@ describe('/threads endpoint', () => {
   afterEach(async () => {
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
   });
 
   describe('when POST /threads', () => {
@@ -217,6 +219,92 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(201);
       expect(responseJson.data.addedThread.title).toEqual(requestPayload.title);
+    });
+  });
+
+  describe('when GET /threads/{threadId}', () => {
+    it('should response with 404 when threads not found in database', async () => {
+      // Arrange
+      const server = await createServer(container);
+
+      // Action
+      const response = await server.inject({
+        method: 'GET',
+        url: `/threads/xxx`,
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('thread not found in database');
+    });
+    it('should response with 200 and getting detail threads as a return', async () => {
+      // Arrange
+      const server = await createServer(container);
+      await server.inject({
+        method: 'POST',
+        url: '/users',
+        payload: {
+          username: 'ayiakbar',
+          password: 'secret',
+          fullname: 'Ayi Akbar Maulana',
+        },
+      });
+
+      const authentications = await server.inject({
+        method: 'POST',
+        url: '/authentications',
+        payload: {
+          username: 'ayiakbar',
+          password: 'secret',
+        },
+      });
+      const responseAuthJson = JSON.parse(authentications.payload);
+
+      const thread = await server.inject({
+        method: 'POST',
+        url: '/threads',
+        payload: {
+          title: 'Dicoding Awesome',
+          body: 'The best course ever',
+        },
+        headers: { authorization: `Bearer ${responseAuthJson.data.accessToken}` },
+      });
+      const threadResponseJson = JSON.parse(thread.payload);
+
+      await server.inject({
+        method: 'POST',
+        url: `/threads/${threadResponseJson.data.addedThread.id}/comments`,
+        payload: {
+          content: 'sebuah comment',
+        },
+        headers: { authorization: `Bearer ${responseAuthJson.data.accessToken}` },
+      });
+
+      await server.inject({
+        method: 'POST',
+        url: `/threads/${threadResponseJson.data.addedThread.id}/comments`,
+        payload: {
+          content: 'sebuah comment 123',
+        },
+        headers: { authorization: `Bearer ${responseAuthJson.data.accessToken}` },
+      });
+
+      // Action
+      const response = await server.inject({
+        method: 'GET',
+        url: `/threads/${threadResponseJson.data.addedThread.id}`,
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+      expect(responseJson.data.thread.id).toEqual(threadResponseJson.data.addedThread.id);
+      expect(responseJson.data.thread.title).toEqual(threadResponseJson.data.addedThread.title);
+      expect(responseJson.data.thread.body).toEqual('The best course ever');
+      expect(responseJson.data.thread.username).toEqual('ayiakbar');
     });
   });
 });
