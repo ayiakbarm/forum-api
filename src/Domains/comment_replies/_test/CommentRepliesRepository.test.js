@@ -7,5 +7,8 @@ describe('CommentRepliesRepository interface', () => {
     await expect(commentRepliesRepository.addReply({})).rejects.toThrowError(
       'COMMENT_REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
     );
+    await expect(commentRepliesRepository.getDetailReplyComment({})).rejects.toThrowError(
+      'COMMENT_REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
   });
 });

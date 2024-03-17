@@ -1,6 +1,7 @@
 const GetDetailThreadUseCase = require('../GetDetailThreadUseCase');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
+const CommentRepliesRepository = require('../../../Domains/comment_replies/CommentRepliesRepository');
 
 describe('GetDetailThreadUseCase', () => {
   it('should throw an error when payload not contain needed property', async () => {
@@ -9,11 +10,13 @@ describe('GetDetailThreadUseCase', () => {
     /** creating dependency for use case */
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
+    const mockCommentRepliesRepository = new CommentRepliesRepository();
 
     /** creating use case instance */
     const getDetailThreadUseCase = new GetDetailThreadUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
+      commentRepliesRepository: mockCommentRepliesRepository,
     });
 
     // Action & Assert
@@ -30,11 +33,13 @@ describe('GetDetailThreadUseCase', () => {
     /** creating dependency for use case */
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
+    const mockCommentRepliesRepository = new CommentRepliesRepository();
 
     /** creating use case instance */
     const getDetailThreadUseCase = new GetDetailThreadUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
+      commentRepliesRepository: mockCommentRepliesRepository,
     });
 
     // Action & Assert
@@ -63,6 +68,7 @@ describe('GetDetailThreadUseCase', () => {
         username: 'johndoe',
         date: '2021-08-08T07:22:33.555Z',
         content: 'sebuah comment',
+        thread: 'thread-123',
       },
       {
         id: 'comment-yksuCoxM2s4MMrZJO-qVD',
@@ -72,9 +78,26 @@ describe('GetDetailThreadUseCase', () => {
       },
     ];
 
+    const expectedReplies = [
+      {
+        id: 'reply-BErOXUSefjwWGW1Z10Ihk',
+        content: '**balasan telah dihapus**',
+        date: '2021-08-08T07:59:48.766Z',
+        username: 'johndoe',
+        thread: 'thread-123',
+      },
+      {
+        id: 'reply-xNBtm9HPR-492AeiimpfN',
+        content: 'sebuah balasan',
+        date: '2021-08-08T08:07:01.522Z',
+        username: 'dicoding',
+        thread: 'thread-abc',
+      },
+    ];
     /** creating dependency for use case */
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
+    const mockCommentRepliesRepository = new CommentRepliesRepository();
 
     /** mocking needed function */
     mockThreadRepository.checkAvailabilityThread = jest
@@ -86,11 +109,15 @@ describe('GetDetailThreadUseCase', () => {
     mockCommentRepository.getDetailCommentThread = jest
       .fn()
       .mockImplementation(() => Promise.resolve(expectedComments));
+    mockCommentRepliesRepository.getDetailReplyComment = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(expectedReplies));
 
     /** creating use case instance */
     const getDetailThreadUseCase = new GetDetailThreadUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
+      commentRepliesRepository: mockCommentRepliesRepository,
     });
 
     // Action

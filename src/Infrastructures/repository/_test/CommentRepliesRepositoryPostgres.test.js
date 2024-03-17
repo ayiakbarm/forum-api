@@ -46,4 +46,33 @@ describe('CommentRepliesRepositoryPostgres interface', () => {
       expect(reply).toHaveLength(1);
     });
   });
+
+  describe('getDetailReplyComment function', () => {
+    it('should return detail reply when given right payload', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ username: 'dicoding' });
+      await ThreadsTableTestHelper.addThread({ title: 'sebuah title', body: 'lorem ipsum dolor' });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        owner: 'user-123',
+        thread: 'thread-123',
+      });
+      await CommentRepliesTableTestHelper.addReply({
+        content: 'sebuah balasan komen dari comment 123',
+      });
+
+      const commentRepliesRepositoryPostgres = new CommentRepliesRepositoryPostgres(pool, {});
+
+      // Action
+      const detailReplyComment = await commentRepliesRepositoryPostgres.getDetailReplyComment(
+        'thread-123'
+      );
+
+      // Assert
+      expect(Array.isArray(detailReplyComment)).toBe(true);
+      expect(detailReplyComment[0].id).toEqual('reply-123');
+      expect(detailReplyComment[0].content).toEqual('sebuah balasan komen dari comment 123');
+      expect(detailReplyComment[0].username).toEqual('dicoding');
+    });
+  });
 });
