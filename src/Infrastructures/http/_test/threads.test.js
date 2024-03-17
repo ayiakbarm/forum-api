@@ -273,7 +273,7 @@ describe('/threads endpoint', () => {
       });
       const threadResponseJson = JSON.parse(thread.payload);
 
-      await server.inject({
+      const comment = await server.inject({
         method: 'POST',
         url: `/threads/${threadResponseJson.data.addedThread.id}/comments`,
         payload: {
@@ -281,6 +281,14 @@ describe('/threads endpoint', () => {
         },
         headers: { authorization: `Bearer ${responseAuthJson.data.accessToken}` },
       });
+      const commentResponseJson = JSON.parse(comment.payload);
+
+      const deletedComment = await server.inject({
+        method: 'DELETE',
+        url: `/threads/${threadResponseJson.data.addedThread.id}/comments/${commentResponseJson.data.addedComment.id}`,
+        headers: { authorization: `Bearer ${responseAuthJson.data.accessToken}` },
+      });
+      console.log('deletedComment', deletedComment);
 
       await server.inject({
         method: 'POST',
