@@ -1,3 +1,5 @@
+const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const CommentRepliesRepository = require('../../Domains/comment_replies/CommentRepliesRepository');
 const AddedReply = require('../../Domains/comment_replies/entities/AddedReply');
 
@@ -36,6 +38,37 @@ class CommentRepliesRepositoryPostgres extends CommentRepliesRepository {
 
     const result = await this._pool.query(query);
     return result.rows;
+  }
+
+  async checkAvailabilityReply(reply) {
+    const query = {
+      text: `SELECT * FROM comment_replies WHERE id = $1`,
+      values: [reply],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rowCount === 0) throw new NotFoundError('reply not found in database');
+  }
+
+  async verifyReplyOwner(reply, owner) {
+    const query = {
+      text: `SELECT * FROM comment_replies WHERE id = $1 AND owner = $2`,
+      values: [reply, owner],
+    };
+
+    const result = await this._pool.query(query);
+    if (result.rowCount === 0)
+      throw new AuthorizationError('user not authorized to delete this reply');
+  }
+
+  async deleteReply(reply) {
+    const query = {
+      text: `UPDATE comment_replies SET is_delete = true WHERE id = $1`,
+      values: [reply],
+    };
+
+    await this._pool.query(query);
   }
 }
 
