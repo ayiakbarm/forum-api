@@ -13,7 +13,10 @@ class DetailComment {
 
   _remappingPayload({ comments }) {
     return comments.map((item) => {
+      // eslint-disable-next-line no-unused-vars
+      const { is_delete, ...rest } = item;
       return {
+        ...rest,
         id: item.id,
         username: item.username,
         date: item.date,

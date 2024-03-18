@@ -1,3 +1,6 @@
+const DetailComment = require('../../Domains/comments/entities/DetailComment');
+const DetailReply = require('../../Domains/comment_replies/entities/DetailReply');
+
 class GetDetailThreadUseCase {
   constructor({ threadRepository, commentRepository, commentRepliesRepository }) {
     this._threadRepository = threadRepository;
@@ -19,6 +22,7 @@ class GetDetailThreadUseCase {
         return tempReplyComments;
       })
     );
+    console.log('getRepliesComments', getRepliesComments);
 
     const updatedCommentsThread = this._groupRepliesWithComments(
       getCommentsThread,
@@ -40,12 +44,16 @@ class GetDetailThreadUseCase {
     const commentsWithReplies = {};
     getCommentsThread.forEach((comment, index) => {
       if (!commentsWithReplies[comment.id]) {
-        commentsWithReplies[comment.id] = { ...comment, replies: getRepliesComments[index] || [] };
+        commentsWithReplies[comment.id] = {
+          ...comment,
+          replies: new DetailReply({ replies: getRepliesComments[index] }).replies || [],
+        };
       }
     });
 
-    const updatedCommentsThread = Object.values(commentsWithReplies);
-    return updatedCommentsThread;
+    const commentsArray = Object.values(commentsWithReplies);
+    const { comments } = new DetailComment({ comments: commentsArray });
+    return comments;
   }
 }
 

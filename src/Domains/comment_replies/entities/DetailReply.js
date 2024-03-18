@@ -11,12 +11,17 @@ class DetailReply {
   }
 
   _remappingPayload({ replies }) {
-    return replies.map((item) => ({
-      id: item.id,
-      content: item.is_delete ? '**balasan telah dihapus**' : item.content,
-      date: item.date,
-      username: item.username,
-    }));
+    return replies.map((item) => {
+      // eslint-disable-next-line no-unused-vars
+      const { is_delete, ...rest } = item;
+      return {
+        ...rest,
+        id: item.id,
+        content: item.is_delete ? '**balasan telah dihapus**' : item.content,
+        date: item.date,
+        username: item.username,
+      };
+    });
   }
 }
 
