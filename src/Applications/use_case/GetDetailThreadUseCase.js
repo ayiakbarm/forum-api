@@ -42,12 +42,10 @@ class GetDetailThreadUseCase {
   _groupRepliesWithComments(getCommentsThread, getRepliesComments) {
     const commentsWithReplies = {};
     getCommentsThread.forEach((comment, index) => {
-      if (!commentsWithReplies[comment.id]) {
-        commentsWithReplies[comment.id] = {
-          ...comment,
-          replies: new DetailReply({ replies: getRepliesComments[index] }).replies || [],
-        };
-      }
+      commentsWithReplies[comment.id] = {
+        ...comment,
+        replies: new DetailReply({ replies: getRepliesComments[index] }).replies,
+      };
     });
 
     const commentsArray = Object.values(commentsWithReplies);

@@ -32,10 +32,11 @@ describe('AddComment entity', () => {
     };
 
     // Action
-    const { content, owner } = new AddComment(payload);
+    const { content, owner, thread } = new AddComment(payload);
 
     // Assert
     expect(content).toEqual(payload.content);
     expect(owner).toEqual(payload.owner);
+    expect(thread).toEqual(payload.thread);
   });
 });

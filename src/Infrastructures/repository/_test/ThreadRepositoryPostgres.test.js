@@ -4,10 +4,17 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
-
+const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
+const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 
 describe('ThreadRepositoryPostgres', () => {
+  it('should be instance of ThreadRepository domain', () => {
+    const threadRepositoryPostgres = new ThreadRepositoryPostgres({}, {}); // Dummy dependency
+
+    expect(threadRepositoryPostgres).toBeInstanceOf(ThreadRepository);
+  });
+
   afterEach(async () => {
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
@@ -32,11 +39,18 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await threadRepositoryPostgres.addThread(newThread);
+      const addedThread = await threadRepositoryPostgres.addThread(newThread);
 
       // Assert
       const thread = await ThreadsTableTestHelper.findThreadById('thread-123');
       expect(thread).toHaveLength(1);
+      expect(addedThread).toStrictEqual(
+        new AddedThread({
+          id: 'thread-123',
+          title: 'Dicoding Awesome',
+          owner: 'user-123',
+        })
+      );
     });
   });
 

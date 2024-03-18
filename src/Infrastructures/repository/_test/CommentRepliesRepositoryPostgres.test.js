@@ -8,8 +8,16 @@ const CommentRepliesRepositoryPostgres = require('../CommentRepliesRepositoryPos
 const AddReply = require('../../../Domains/comment_replies/entities/AddReply');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
+const CommentRepliesRepository = require('../../../Domains/comment_replies/CommentRepliesRepository');
+const AddedReply = require('../../../Domains/comment_replies/entities/AddedReply');
 
 describe('CommentRepliesRepositoryPostgres interface', () => {
+  it('should be instance of CommentRepliesRepository domain', () => {
+    const threadRepositoryPostgres = new CommentRepliesRepositoryPostgres({}, {}); // Dummy dependency
+
+    expect(threadRepositoryPostgres).toBeInstanceOf(CommentRepliesRepository);
+  });
+
   afterEach(async () => {
     await CommentRepliesTableTestHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
@@ -41,10 +49,19 @@ describe('CommentRepliesRepositoryPostgres interface', () => {
       );
 
       // Action
-      await commentRepliesRepositoryPostgres.addReply(newReply);
+      const addedReply = await commentRepliesRepositoryPostgres.addReply(newReply);
 
       // Assert
       const reply = await CommentRepliesTableTestHelper.findReplyById('reply-123');
+      expect(addedReply).toStrictEqual(
+        new AddedReply({
+          id: 'reply-123',
+          content: 'sebuah balasan komen',
+          owner: 'user-123',
+          comment: 'comment-123',
+          thread: 'thread-123',
+        })
+      );
       expect(reply).toHaveLength(1);
     });
   });

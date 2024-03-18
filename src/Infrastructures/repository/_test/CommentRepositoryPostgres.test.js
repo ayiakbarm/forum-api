@@ -6,8 +6,16 @@ const pool = require('../../database/postgres/pool');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
+const CommentRepository = require('../../../Domains/comments/CommentRepository');
+const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 
 describe('CommentRepositoryPostgres interface', () => {
+  it('should be instance of CommentRepository domain', () => {
+    const threadRepositoryPostgres = new CommentRepositoryPostgres({}, {}); // Dummy dependency
+
+    expect(threadRepositoryPostgres).toBeInstanceOf(CommentRepository);
+  });
+
   afterEach(async () => {
     await CommentsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
@@ -24,7 +32,6 @@ describe('CommentRepositoryPostgres interface', () => {
       await UsersTableTestHelper.addUser({ id: 'user-123' });
       await ThreadsTableTestHelper.addThread({ title: 'sebuah thread' });
       const newComment = new AddComment({
-        id: 'comment-123',
         content: 'sebuah comment',
         owner: 'user-123',
         thread: 'thread-123',
@@ -33,10 +40,18 @@ describe('CommentRepositoryPostgres interface', () => {
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      await commentRepositoryPostgres.addComment(newComment);
+      const addedComment = await commentRepositoryPostgres.addComment(newComment);
 
       // Assert
       const comment = await CommentsTableTestHelper.findCommentById('comment-123');
+      expect(addedComment).toStrictEqual(
+        new AddedComment({
+          id: 'comment-123',
+          content: 'sebuah comment',
+          owner: 'user-123',
+          thread: 'thread-123',
+        })
+      );
       expect(comment).toHaveLength(1);
     });
   });

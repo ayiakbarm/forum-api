@@ -1,6 +1,5 @@
 const AddReplyUseCase = require('../AddReplyUseCase');
 const AddReply = require('../../../Domains/comment_replies/entities/AddReply');
-const AddedReply = require('../../../Domains/comment_replies/entities/AddedReply');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const CommentRepliesRepository = require('../../../Domains/comment_replies/CommentRepliesRepository');
@@ -14,11 +13,11 @@ describe('AddReplyUseCase', () => {
       comment: 'comment-123',
       thread: 'thread-123',
     });
-    const mockAddedReply = new AddedReply({
+    const expectedAddedReply = {
       id: 'reply-123',
       content: 'sebuah balasan',
       owner: 'user-123',
-    });
+    };
 
     /** creating dependency for use case */
     const mockThreadRepository = new ThreadRepository();
@@ -32,9 +31,11 @@ describe('AddReplyUseCase', () => {
     mockCommentRepository.checkAvailabilityComment = jest
       .fn()
       .mockImplementation(() => Promise.resolve());
-    mockCommentRepliesRepository.addReply = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(mockAddedReply));
+    mockCommentRepliesRepository.addReply = jest.fn(() => ({
+      id: 'reply-123',
+      content: 'sebuah balasan',
+      owner: 'user-123',
+    }));
 
     /** creating useCase instance */
     const addReplyUseCase = new AddReplyUseCase({
@@ -49,12 +50,14 @@ describe('AddReplyUseCase', () => {
     // Assert
     expect(mockThreadRepository.checkAvailabilityThread).toBeCalledWith(useCasePayload.thread);
     expect(mockCommentRepository.checkAvailabilityComment).toBeCalledWith(useCasePayload.comment);
-    expect(mockCommentRepliesRepository.addReply).toBeCalledWith({
-      content: useCasePayload.content,
-      owner: useCasePayload.owner,
-      comment: useCasePayload.comment,
-      thread: useCasePayload.thread,
-    });
-    expect(addedReply).toStrictEqual(mockAddedReply);
+    expect(mockCommentRepliesRepository.addReply).toBeCalledWith(
+      new AddReply({
+        content: useCasePayload.content,
+        owner: useCasePayload.owner,
+        comment: useCasePayload.comment,
+        thread: useCasePayload.thread,
+      })
+    );
+    expect(addedReply).toStrictEqual(expectedAddedReply);
   });
 });
