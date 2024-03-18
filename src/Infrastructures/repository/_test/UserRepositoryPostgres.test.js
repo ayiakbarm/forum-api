@@ -51,7 +51,6 @@ describe('UserRepositoryPostgres', () => {
       // Action
       const result = await userRepositoryPostgres.addUser(registerUser);
 
-      console.log('result', result);
       // Assert
       const users = await UsersTableTestHelper.findUsersById('user-123');
       expect(users).toHaveLength(1);
