@@ -35,7 +35,7 @@ describe('DeleteReplyUseCase', () => {
     const deleteReplyUseCase = new DeleteReplyUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
-      replyRepository: mockReplyRepository,
+      commentRepliesRepository: mockReplyRepository,
     });
 
     // Action

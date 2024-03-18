@@ -22,7 +22,6 @@ class GetDetailThreadUseCase {
         return tempReplyComments;
       })
     );
-    console.log('getRepliesComments', getRepliesComments);
 
     const updatedCommentsThread = this._groupRepliesWithComments(
       getCommentsThread,
