@@ -69,22 +69,25 @@ describe('GetDetailThreadUseCase', () => {
         date: '2021-08-08T07:22:33.555Z',
         content: 'sebuah comment',
         thread: 'thread-123',
+        is_delete: false,
       },
       {
         id: 'comment-yksuCoxM2s4MMrZJO-qVD',
         username: 'dicoding',
         date: '2021-08-08T07:26:21.338Z',
-        content: '**komentar telah dihapus**',
+        content: 'tolong tunjukkan errornya',
+        is_delete: true,
       },
     ];
 
     const expectedReplies = [
       {
         id: 'reply-BErOXUSefjwWGW1Z10Ihk',
-        content: '**balasan telah dihapus**',
+        content: 'sebuah balasan yang akan di hapus',
         date: '2021-08-08T07:59:48.766Z',
         username: 'johndoe',
         thread: 'thread-123',
+        is_delete: true,
       },
       {
         id: 'reply-xNBtm9HPR-492AeiimpfN',
@@ -92,6 +95,7 @@ describe('GetDetailThreadUseCase', () => {
         date: '2021-08-08T08:07:01.522Z',
         username: 'dicoding',
         thread: 'thread-abc',
+        is_delete: false,
       },
     ];
 
@@ -172,21 +176,24 @@ describe('GetDetailThreadUseCase', () => {
         date: '2021-08-08T07:22:33.555Z',
         content: 'sebuah comment',
         thread: 'thread-123',
+        is_delete: false,
       },
       {
         id: 'comment-yksuCoxM2s4MMrZJO-qVD',
         username: 'dicoding',
         date: '2021-08-08T07:26:21.338Z',
-        content: '**komentar telah dihapus**',
+        content: 'tolong tunjukkan errornya',
+        is_delete: true,
       },
     ]);
     mockCommentRepliesRepository.getDetailReplyComment = jest.fn(() => [
       {
         id: 'reply-BErOXUSefjwWGW1Z10Ihk',
-        content: '**balasan telah dihapus**',
+        content: 'sebuah balasan yang akan di hapus',
         date: '2021-08-08T07:59:48.766Z',
         username: 'johndoe',
         thread: 'thread-123',
+        is_delete: true,
       },
       {
         id: 'reply-xNBtm9HPR-492AeiimpfN',
@@ -194,6 +201,7 @@ describe('GetDetailThreadUseCase', () => {
         date: '2021-08-08T08:07:01.522Z',
         username: 'dicoding',
         thread: 'thread-abc',
+        is_delete: false,
       },
     ]);
 
