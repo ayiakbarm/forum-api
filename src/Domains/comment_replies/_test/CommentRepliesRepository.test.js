@@ -10,5 +10,14 @@ describe('CommentRepliesRepository interface', () => {
     await expect(commentRepliesRepository.getDetailReplyComment({})).rejects.toThrowError(
       'COMMENT_REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
     );
+    await expect(commentRepliesRepository.checkAvailabilityReply({})).rejects.toThrowError(
+      'COMMENT_REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
+    await expect(commentRepliesRepository.verifyReplyOwner({})).rejects.toThrowError(
+      'COMMENT_REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
+    await expect(commentRepliesRepository.deleteReply({})).rejects.toThrowError(
+      'COMMENT_REPLIES_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
   });
 });
