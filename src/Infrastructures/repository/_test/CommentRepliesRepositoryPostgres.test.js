@@ -92,6 +92,8 @@ describe('CommentRepliesRepositoryPostgres interface', () => {
       expect(detailReplyComment[0].id).toEqual('reply-123');
       expect(detailReplyComment[0].content).toEqual('sebuah balasan komen dari comment 123');
       expect(detailReplyComment[0].username).toEqual('dicoding');
+      expect(detailReplyComment[0].is_delete).toEqual(false);
+      expect(detailReplyComment[0].date).not.toBeNull();
     });
   });
 

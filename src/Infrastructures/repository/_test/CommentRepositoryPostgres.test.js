@@ -149,6 +149,8 @@ describe('CommentRepositoryPostgres interface', () => {
       expect(detailCommentThread[0].id).toEqual('comment-123');
       expect(detailCommentThread[0].username).toEqual('dicoding');
       expect(detailCommentThread[0].content).toEqual('sebuah comment');
+      expect(detailCommentThread[0].is_delete).toEqual(false);
+      expect(detailCommentThread[0].date).not.toBeNull();
     });
   });
 

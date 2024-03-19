@@ -2,6 +2,7 @@ const RegisterUser = require('../../../Domains/users/entities/RegisterUser');
 const UserRepository = require('../../../Domains/users/UserRepository');
 const PasswordHash = require('../../security/PasswordHash');
 const AddUserUseCase = require('../AddUserUseCase');
+const RegisteredUser = require('../../../Domains/users/entities/RegisteredUser');
 
 describe('AddUserUseCase', () => {
   /**
@@ -15,11 +16,11 @@ describe('AddUserUseCase', () => {
       fullname: 'Dicoding Indonesia',
     });
 
-    const expectedRegisteredUser = {
+    const expectedRegisteredUser = new RegisteredUser({
       id: 'user-123',
       username: useCasePayload.username,
       fullname: useCasePayload.fullname,
-    };
+    });
 
     /** creating dependency of use case */
     const mockUserRepository = new UserRepository();
@@ -32,11 +33,14 @@ describe('AddUserUseCase', () => {
     mockPasswordHash.hash = jest
       .fn()
       .mockImplementation(() => Promise.resolve('encrypted_password'));
-    mockUserRepository.addUser = jest.fn(() => ({
-      id: 'user-123',
-      username: useCasePayload.username,
-      fullname: useCasePayload.fullname,
-    }));
+    mockUserRepository.addUser = jest.fn(
+      () =>
+        new RegisteredUser({
+          id: 'user-123',
+          username: useCasePayload.username,
+          fullname: useCasePayload.fullname,
+        })
+    );
 
     /** creating use case instance */
     const getUserUseCase = new AddUserUseCase({

@@ -1,6 +1,7 @@
 const AddThreadUseCase = require('../AddThreadUseCase');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const AddThread = require('../../../Domains/threads/entities/AddThread');
+const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 
 describe('AddThreadUseCase', () => {
   it('should orchestrating add threads use case correctly', async () => {
@@ -10,25 +11,28 @@ describe('AddThreadUseCase', () => {
       body: 'Dicoding are awesome',
       owner: 'owner-123',
     });
-    const expectedThread = {
+    const expectedThread = new AddedThread({
       id: 'thread-123',
       title: useCasePayload.title,
       body: useCasePayload.body,
       owner: 'owner-123',
       date: '2024-03-09T13:28:57.124Z',
-    };
+    });
 
     /** creating dependency for use case */
     const mockThreadRepository = new ThreadRepository();
 
     /** mocking needed function */
-    mockThreadRepository.addThread = jest.fn(() => ({
-      id: 'thread-123',
-      title: useCasePayload.title,
-      body: useCasePayload.body,
-      owner: 'owner-123',
-      date: '2024-03-09T13:28:57.124Z',
-    }));
+    mockThreadRepository.addThread = jest.fn(
+      () =>
+        new AddedThread({
+          id: 'thread-123',
+          title: useCasePayload.title,
+          body: useCasePayload.body,
+          owner: 'owner-123',
+          date: '2024-03-09T13:28:57.124Z',
+        })
+    );
 
     /** creating use case instance */
     const addThreadUseCase = new AddThreadUseCase({

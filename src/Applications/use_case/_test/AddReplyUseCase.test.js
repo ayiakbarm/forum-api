@@ -1,5 +1,6 @@
 const AddReplyUseCase = require('../AddReplyUseCase');
 const AddReply = require('../../../Domains/comment_replies/entities/AddReply');
+const AddedReply = require('../../../Domains/comment_replies/entities/AddedReply');
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const CommentRepliesRepository = require('../../../Domains/comment_replies/CommentRepliesRepository');
@@ -13,11 +14,11 @@ describe('AddReplyUseCase', () => {
       comment: 'comment-123',
       thread: 'thread-123',
     });
-    const expectedAddedReply = {
+    const expectedAddedReply = new AddedReply({
       id: 'reply-123',
       content: 'sebuah balasan',
       owner: 'user-123',
-    };
+    });
 
     /** creating dependency for use case */
     const mockThreadRepository = new ThreadRepository();
@@ -31,11 +32,14 @@ describe('AddReplyUseCase', () => {
     mockCommentRepository.checkAvailabilityComment = jest
       .fn()
       .mockImplementation(() => Promise.resolve());
-    mockCommentRepliesRepository.addReply = jest.fn(() => ({
-      id: 'reply-123',
-      content: 'sebuah balasan',
-      owner: 'user-123',
-    }));
+    mockCommentRepliesRepository.addReply = jest.fn(
+      () =>
+        new AddedReply({
+          id: 'reply-123',
+          content: 'sebuah balasan',
+          owner: 'user-123',
+        })
+    );
 
     /** creating useCase instance */
     const addReplyUseCase = new AddReplyUseCase({

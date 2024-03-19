@@ -102,6 +102,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(detailThread.title).toEqual('sebuah thread');
       expect(detailThread.body).toEqual('lorem ipsum dolor sit amet');
       expect(detailThread.username).toEqual('dicoding');
+      expect(detailThread.date).not.toBeNull();
     });
   });
 });
