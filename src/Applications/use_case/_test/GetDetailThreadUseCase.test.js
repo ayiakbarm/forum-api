@@ -68,7 +68,6 @@ describe('GetDetailThreadUseCase', () => {
         username: 'johndoe',
         date: '2021-08-08T07:22:33.555Z',
         content: 'sebuah comment',
-        thread: 'thread-123',
         is_delete: false,
       },
       {
@@ -86,7 +85,6 @@ describe('GetDetailThreadUseCase', () => {
         content: 'sebuah balasan yang akan di hapus',
         date: '2021-08-08T07:59:48.766Z',
         username: 'johndoe',
-        thread: 'thread-123',
         is_delete: true,
       },
       {
@@ -94,7 +92,6 @@ describe('GetDetailThreadUseCase', () => {
         content: 'sebuah balasan',
         date: '2021-08-08T08:07:01.522Z',
         username: 'dicoding',
-        thread: 'thread-abc',
         is_delete: false,
       },
     ];
@@ -111,21 +108,18 @@ describe('GetDetailThreadUseCase', () => {
           username: 'johndoe',
           date: '2021-08-08T07:22:33.555Z',
           content: 'sebuah comment',
-          thread: 'thread-123',
           replies: [
             {
               id: 'reply-BErOXUSefjwWGW1Z10Ihk',
               content: '**balasan telah dihapus**',
               date: '2021-08-08T07:59:48.766Z',
               username: 'johndoe',
-              thread: 'thread-123',
             },
             {
               id: 'reply-xNBtm9HPR-492AeiimpfN',
               content: 'sebuah balasan',
               date: '2021-08-08T08:07:01.522Z',
               username: 'dicoding',
-              thread: 'thread-abc',
             },
           ],
         },
@@ -140,14 +134,12 @@ describe('GetDetailThreadUseCase', () => {
               content: '**balasan telah dihapus**',
               date: '2021-08-08T07:59:48.766Z',
               username: 'johndoe',
-              thread: 'thread-123',
             },
             {
               id: 'reply-xNBtm9HPR-492AeiimpfN',
               content: 'sebuah balasan',
               date: '2021-08-08T08:07:01.522Z',
               username: 'dicoding',
-              thread: 'thread-abc',
             },
           ],
         },
@@ -178,7 +170,6 @@ describe('GetDetailThreadUseCase', () => {
           username: 'johndoe',
           date: '2021-08-08T07:22:33.555Z',
           content: 'sebuah comment',
-          thread: 'thread-123',
           is_delete: false,
         },
         {
@@ -197,7 +188,6 @@ describe('GetDetailThreadUseCase', () => {
           content: 'sebuah balasan yang akan di hapus',
           date: '2021-08-08T07:59:48.766Z',
           username: 'johndoe',
-          thread: 'thread-123',
           is_delete: true,
         },
         {
@@ -205,7 +195,6 @@ describe('GetDetailThreadUseCase', () => {
           content: 'sebuah balasan',
           date: '2021-08-08T08:07:01.522Z',
           username: 'dicoding',
-          thread: 'thread-abc',
           is_delete: false,
         },
       ])
@@ -252,21 +241,18 @@ describe('_groupRepliesWithComments function ', () => {
         username: 'johndoe',
         date: '2021-08-08T07:22:33.555Z',
         content: '**komentar telah dihapus**',
-        thread: 'thread-123',
         replies: [
           {
             id: 'reply-BErOXUSefjwWGW1Z10Ihk',
             content: 'sebuah komen balasan',
             date: '2021-08-08T07:59:48.766Z',
             username: 'johndoe',
-            thread: 'thread-123',
           },
           {
             id: 'reply-xNBtm9HPR-492AeiimpfN',
             content: '**balasan telah dihapus**',
             date: '2021-08-08T08:07:01.522Z',
             username: 'dicoding',
-            thread: 'thread-abc',
           },
         ],
       },
@@ -278,7 +264,6 @@ describe('_groupRepliesWithComments function ', () => {
         username: 'johndoe',
         date: '2021-08-08T07:22:33.555Z',
         content: 'sebuah comment',
-        thread: 'thread-123',
         is_delete: true,
       },
     ];
@@ -289,7 +274,6 @@ describe('_groupRepliesWithComments function ', () => {
           content: 'sebuah komen balasan',
           date: '2021-08-08T07:59:48.766Z',
           username: 'johndoe',
-          thread: 'thread-123',
           is_delete: false,
         },
         {
@@ -297,7 +281,6 @@ describe('_groupRepliesWithComments function ', () => {
           content: 'sebuah balasan',
           date: '2021-08-08T08:07:01.522Z',
           username: 'dicoding',
-          thread: 'thread-abc',
           is_delete: true,
         },
       ],
