@@ -23,8 +23,8 @@ describe('AddThreadUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
 
     /** mocking needed function */
-    mockThreadRepository.addThread = jest.fn(
-      () =>
+    mockThreadRepository.addThread = jest.fn().mockImplementation(() =>
+      Promise.resolve(
         new AddedThread({
           id: 'thread-123',
           title: useCasePayload.title,
@@ -32,6 +32,7 @@ describe('AddThreadUseCase', () => {
           owner: 'owner-123',
           date: '2024-03-09T13:28:57.124Z',
         })
+      )
     );
 
     /** creating use case instance */

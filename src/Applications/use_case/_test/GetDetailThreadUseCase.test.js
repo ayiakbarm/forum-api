@@ -162,48 +162,54 @@ describe('GetDetailThreadUseCase', () => {
     mockThreadRepository.checkAvailabilityThread = jest
       .fn()
       .mockImplementation(() => Promise.resolve());
-    mockThreadRepository.getDetailThread = jest.fn(() => ({
-      id: 'thread-123',
-      title: 'sebuah thread',
-      body: 'lorem ipsum dolor sit amet',
-      date: '2024-03-17T04:38:49.874Z',
-      username: 'dicoding',
-    }));
-    mockCommentRepository.getDetailCommentThread = jest.fn(() => [
-      {
-        id: 'comment-_pby2_tmXV6bcvcdev8xk',
-        username: 'johndoe',
-        date: '2021-08-08T07:22:33.555Z',
-        content: 'sebuah comment',
-        thread: 'thread-123',
-        is_delete: false,
-      },
-      {
-        id: 'comment-yksuCoxM2s4MMrZJO-qVD',
+    mockThreadRepository.getDetailThread = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        id: 'thread-123',
+        title: 'sebuah thread',
+        body: 'lorem ipsum dolor sit amet',
+        date: '2024-03-17T04:38:49.874Z',
         username: 'dicoding',
-        date: '2021-08-08T07:26:21.338Z',
-        content: 'tolong tunjukkan errornya',
-        is_delete: true,
-      },
-    ]);
-    mockCommentRepliesRepository.getDetailReplyComment = jest.fn(() => [
-      {
-        id: 'reply-BErOXUSefjwWGW1Z10Ihk',
-        content: 'sebuah balasan yang akan di hapus',
-        date: '2021-08-08T07:59:48.766Z',
-        username: 'johndoe',
-        thread: 'thread-123',
-        is_delete: true,
-      },
-      {
-        id: 'reply-xNBtm9HPR-492AeiimpfN',
-        content: 'sebuah balasan',
-        date: '2021-08-08T08:07:01.522Z',
-        username: 'dicoding',
-        thread: 'thread-abc',
-        is_delete: false,
-      },
-    ]);
+      })
+    );
+    mockCommentRepository.getDetailCommentThread = jest.fn().mockImplementation(() =>
+      Promise.resolve([
+        {
+          id: 'comment-_pby2_tmXV6bcvcdev8xk',
+          username: 'johndoe',
+          date: '2021-08-08T07:22:33.555Z',
+          content: 'sebuah comment',
+          thread: 'thread-123',
+          is_delete: false,
+        },
+        {
+          id: 'comment-yksuCoxM2s4MMrZJO-qVD',
+          username: 'dicoding',
+          date: '2021-08-08T07:26:21.338Z',
+          content: 'tolong tunjukkan errornya',
+          is_delete: true,
+        },
+      ])
+    );
+    mockCommentRepliesRepository.getDetailReplyComment = jest.fn().mockImplementation(() =>
+      Promise.resolve([
+        {
+          id: 'reply-BErOXUSefjwWGW1Z10Ihk',
+          content: 'sebuah balasan yang akan di hapus',
+          date: '2021-08-08T07:59:48.766Z',
+          username: 'johndoe',
+          thread: 'thread-123',
+          is_delete: true,
+        },
+        {
+          id: 'reply-xNBtm9HPR-492AeiimpfN',
+          content: 'sebuah balasan',
+          date: '2021-08-08T08:07:01.522Z',
+          username: 'dicoding',
+          thread: 'thread-abc',
+          is_delete: false,
+        },
+      ])
+    );
 
     /** creating use case instance */
     const getDetailThreadUseCase = new GetDetailThreadUseCase({
@@ -212,12 +218,14 @@ describe('GetDetailThreadUseCase', () => {
       commentRepliesRepository: mockCommentRepliesRepository,
     });
 
-    const thread = mockThreadRepository.getDetailThread(useCasePayload.thread);
-    const detailCommentsThread = mockCommentRepository.getDetailCommentThread(
+    const thread = await mockThreadRepository.getDetailThread(useCasePayload.thread);
+    const detailCommentsThread = await mockCommentRepository.getDetailCommentThread(
       useCasePayload.thread
     );
     const commentId = detailCommentsThread.map((item) => item.id);
-    const detailRepliesComment = mockCommentRepliesRepository.getDetailReplyComment(commentId[0]);
+    const detailRepliesComment = await mockCommentRepliesRepository.getDetailReplyComment(
+      commentId[0]
+    );
 
     // Action
     const detailThread = await getDetailThreadUseCase.execute(useCasePayload);
