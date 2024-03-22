@@ -16,6 +16,7 @@ describe('AddLikesToComment entities', () => {
     const payload = {
       threadId: true,
       commentId: {},
+      userId: 'user-123',
     };
 
     // Action & Assert
@@ -29,13 +30,15 @@ describe('AddLikesToComment entities', () => {
     const payload = {
       threadId: 'thread-123',
       commentId: 'comment-123',
+      userId: 'user-123',
     };
 
     // Action
-    const { threadId, commentId } = new AddLikesToComment(payload);
+    const { threadId, commentId, userId } = new AddLikesToComment(payload);
 
     // Assert
     expect(threadId).toEqual(payload.threadId);
     expect(commentId).toEqual(payload.commentId);
+    expect(userId).toEqual(payload.userId);
   });
 });
