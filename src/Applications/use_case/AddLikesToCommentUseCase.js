@@ -7,7 +7,7 @@ class AddLikesToCommentUseCase {
   }
 
   async execute(useCasePayload) {
-    const { threadId, commentId, userId } = useCasePayload;
+    const { threadId, commentId } = useCasePayload;
     await this._threadRepository.checkAvailabilityThread(threadId);
     await this._commentRepository.checkAvailabilityComment(commentId);
     const addLikesToComment = new AddLikesToComment(useCasePayload);
