@@ -46,6 +46,7 @@ jobs:
           PORT: 3000
           PGHOST: localhost
           PGPORT: 5432
+          PGUSER: postgres
           PGPASSWORD: Desember2612
           PGDATABASE: forumapi_test
           ACCESS_TOKEN_KEY: secret
