@@ -213,4 +213,37 @@ describe('CommentRepositoryPostgres interface', () => {
       expect(commentWithLikes).toHaveLength(1);
     });
   });
+
+  describe('removeLikesFromComment function', () => {
+    it('should remove likes from comment', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        thread: 'thread-123',
+        owner: 'user-123',
+      });
+      await CommentWithLikesTableTestHelper.addCommentLikes({
+        id: 'comment-likes-123',
+        userId: 'user-123',
+        commentId: 'comment-123',
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const payload = {
+        userId: 'user-123',
+        commentId: 'comment-123',
+      };
+
+      // Action
+      await commentRepositoryPostgres.removeLikesFromComment(payload);
+
+      // Assert
+      const commentWithLikes = await CommentWithLikesTableTestHelper.findCommentWithLikesById(
+        'comment-likes-123'
+      );
+      expect(commentWithLikes).toHaveLength(0);
+    });
+  });
 });

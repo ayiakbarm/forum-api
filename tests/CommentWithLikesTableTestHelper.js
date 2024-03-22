@@ -8,8 +8,8 @@ const CommentWithLikesTableTestHelper = {
     commentId = 'comment-123',
   }) {
     const query = {
-      text: 'INSERT INTO comment_with_likes VALUES($1, $2, $3) RETURNING id',
-      values: [id, userId, commentId],
+      text: 'INSERT INTO comment_with_likes VALUES($1, $2, $3)',
+      values: [id, commentId, userId],
     };
 
     await pool.query(query);
