@@ -1,7 +1,5 @@
 /* eslint-disable camelcase */
 
-exports.shorthands = undefined;
-
 exports.up = (pgm) => {
   pgm.addColumn('comment_replies', {
     is_delete: {
