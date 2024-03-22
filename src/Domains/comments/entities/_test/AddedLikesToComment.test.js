@@ -15,8 +15,8 @@ describe('AddedLikesToComment entities', () => {
     // Arrange
     const payload = {
       id: true,
-      userId: 123,
-      commentId: 'comment-123',
+      user_id: 123,
+      comment_id: 'comment-123',
     };
 
     // Action & Assert
@@ -29,16 +29,16 @@ describe('AddedLikesToComment entities', () => {
     // Arrange
     const payload = {
       id: 'comment-likes-123',
-      userId: 'user-123',
-      commentId: 'comment-123',
+      user_id: 'user-123',
+      comment_id: 'comment-123',
     };
 
     // Action
-    const { id, userId, commentId } = new AddedLikesToComment(payload);
+    const { id, user_id, comment_id } = new AddedLikesToComment(payload);
 
     // Assert
     expect(id).toEqual(payload.id);
-    expect(userId).toEqual(payload.userId);
-    expect(commentId).toEqual(payload.commentId);
+    expect(user_id).toEqual(payload.user_id);
+    expect(comment_id).toEqual(payload.comment_id);
   });
 });

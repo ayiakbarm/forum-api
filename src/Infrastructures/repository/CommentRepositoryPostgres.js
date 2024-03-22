@@ -2,6 +2,7 @@ const CommentRepository = require('../../Domains/comments/CommentRepository');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const AddedLikesToComment = require('../../Domains/comments/entities/AddedLikesToComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -22,7 +23,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     };
 
     const result = await this._pool.query(query);
-    return new AddedComment({ ...result.rows[0] });
+    return new AddedComment(result.rows[0]);
   }
 
   async checkAvailabilityComment(commentId) {
@@ -71,6 +72,19 @@ class CommentRepositoryPostgres extends CommentRepository {
     };
 
     await this._pool.query(query);
+  }
+
+  async addLikesToComment(payload) {
+    const { userId, commentId } = payload;
+    const id = `comment-likes-${this._idGenerator()}`;
+
+    const query = {
+      text: 'INSERT INTO comment_with_likes VALUES($1, $2, $3) RETURNING id, user_id, comment_id',
+      values: [id, commentId, userId],
+    };
+
+    const result = await this._pool.query(query);
+    return new AddedLikesToComment(result.rows[0]);
   }
 }
 

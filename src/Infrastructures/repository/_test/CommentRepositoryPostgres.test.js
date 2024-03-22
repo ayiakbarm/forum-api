@@ -1,6 +1,7 @@
 const AddComment = require('../../../Domains/comments/entities/AddComment');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const CommentWithLikesTableTestHelper = require('../../../../tests/CommentWithLikesTableTestHelper');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 const pool = require('../../database/postgres/pool');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
@@ -8,6 +9,8 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
+const AddLikesToComment = require('../../../Domains/comments/entities/AddLikesToComment');
+const AddedLikesToComment = require('../../../Domains/comments/entities/AddedLikesToComment');
 
 describe('CommentRepositoryPostgres interface', () => {
   it('should be instance of CommentRepository domain', () => {
@@ -20,6 +23,7 @@ describe('CommentRepositoryPostgres interface', () => {
     await CommentsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
+    await CommentWithLikesTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
@@ -173,6 +177,40 @@ describe('CommentRepositoryPostgres interface', () => {
       // Assert
       const comment = await CommentsTableTestHelper.findCommentById(commentId);
       expect(comment[0].is_delete).toEqual(true);
+    });
+  });
+
+  describe('addLikesToComment function', () => {
+    it('should persist add likes to comment', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+
+      const newLikes = new AddLikesToComment({
+        threadId: 'thread-123',
+        commentId: 'comment-123',
+        userId: 'user-123',
+      });
+
+      const fakeIdGenerator = () => '123';
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
+
+      // Action
+      const addedLikes = await commentRepositoryPostgres.addLikesToComment(newLikes);
+      console.log('addedLikes', addedLikes);
+
+      const commentWithLikes = await CommentWithLikesTableTestHelper.findCommentWithLikesById(
+        'comment-likes-123'
+      );
+      expect(addedLikes).toStrictEqual(
+        new AddedLikesToComment({
+          id: 'comment-likes-123',
+          user_id: 'user-123',
+          comment_id: 'comment-123',
+        })
+      );
+      expect(commentWithLikes).toHaveLength(1);
     });
   });
 });
