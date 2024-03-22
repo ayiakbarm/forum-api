@@ -198,7 +198,6 @@ describe('CommentRepositoryPostgres interface', () => {
 
       // Action
       const addedLikes = await commentRepositoryPostgres.addLikesToComment(newLikes);
-      console.log('addedLikes', addedLikes);
 
       const commentWithLikes = await CommentWithLikesTableTestHelper.findCommentWithLikesById(
         'comment-likes-123'
