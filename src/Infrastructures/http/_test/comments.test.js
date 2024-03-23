@@ -505,4 +505,72 @@ describe('/thread/{threadId}/comments endpoint', () => {
       expect(responseJson.status).toEqual('success');
     });
   });
+
+  describe('when PUT likes comment threads/{threadId}/comments/{commentId}/likes', () => {
+    it('should response with 200 when comments are exists and response with status success', async () => {
+      // Arrange
+      const server = await createServer(container);
+      await server.inject({
+        method: 'POST',
+        url: '/users',
+        payload: {
+          username: 'ayiakbar',
+          password: 'secret',
+          fullname: 'Ayi Akbar Maulana',
+        },
+      });
+      await server.inject({
+        method: 'POST',
+        url: '/users',
+        payload: {
+          username: 'dicoding',
+          password: 'secret',
+          fullname: 'Dicoding Indonesia',
+        },
+      });
+
+      const authUserA = await server.inject({
+        method: 'POST',
+        url: '/authentications',
+        payload: {
+          username: 'ayiakbar',
+          password: 'secret',
+        },
+      });
+      const authUserAResponse = JSON.parse(authUserA.payload);
+
+      const thread = await server.inject({
+        method: 'POST',
+        url: '/threads',
+        payload: {
+          title: 'sebuah thread',
+          body: 'lorem ipsum dolor sit amet, consectetur',
+        },
+        headers: { authorization: `Bearer ${authUserAResponse.data.accessToken}` },
+      });
+      const responseThreadJson = JSON.parse(thread.payload);
+
+      const comment = await server.inject({
+        method: 'POST',
+        url: `/threads/${responseThreadJson.data.addedThread.id}/comments`,
+        payload: {
+          content: 'sebuah comment',
+        },
+        headers: { authorization: `Bearer ${authUserAResponse.data.accessToken}` },
+      });
+      const responseCommentJson = JSON.parse(comment.payload);
+
+      // Action
+      const response = await server.inject({
+        method: 'PUT',
+        url: `/threads/${responseThreadJson.data.addedThread.id}/comments/${responseCommentJson.data.addedComment.id}/likes`,
+        headers: { authorization: `Bearer ${authUserAResponse.data.accessToken}` },
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      console.log('responseJson', responseJson);
+      expect(response.statusCode).toEqual(200);
+    });
+  });
 });
