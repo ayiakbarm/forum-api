@@ -3,7 +3,7 @@
 exports.up = (pgm) => {
   pgm.createTable('comment_with_likes', {
     id: {
-      type: 'VARCHAR(50)',
+      type: 'VARCHAR(100)',
       primaryKey: true,
     },
     comment_id: {
