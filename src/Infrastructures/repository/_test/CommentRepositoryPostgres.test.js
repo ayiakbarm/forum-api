@@ -197,7 +197,10 @@ describe('CommentRepositoryPostgres interface', () => {
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
 
       // Action
-      const addedLikes = await commentRepositoryPostgres.addLikesToComment(newLikes);
+      const addedLikes = await commentRepositoryPostgres.addLikesToComment(
+        newLikes.userId,
+        newLikes.commentId
+      );
 
       const commentWithLikes = await CommentWithLikesTableTestHelper.findCommentWithLikesById(
         'comment-likes-123'
@@ -230,13 +233,9 @@ describe('CommentRepositoryPostgres interface', () => {
       });
 
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-      const payload = {
-        userId: 'user-123',
-        commentId: 'comment-123',
-      };
 
       // Action
-      await commentRepositoryPostgres.removeLikesFromComment(payload);
+      await commentRepositoryPostgres.removeLikesFromComment('user-123', 'comment-123');
 
       // Assert
       const commentWithLikes = await CommentWithLikesTableTestHelper.findCommentWithLikesById(
@@ -263,13 +262,12 @@ describe('CommentRepositoryPostgres interface', () => {
       });
 
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-      const payload = {
-        userId: 'user-123',
-        commentId: 'comment-123',
-      };
 
       // Action
-      const isLiked = await commentRepositoryPostgres.checkWhetherCommentIsLikedOrNot(payload);
+      const isLiked = await commentRepositoryPostgres.checkWhetherCommentIsLikedOrNot(
+        'user-123',
+        'comment-123'
+      );
 
       // Assert
       expect(isLiked).toBe(true);
@@ -286,13 +284,12 @@ describe('CommentRepositoryPostgres interface', () => {
       });
 
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-      const payload = {
-        userId: 'user-123',
-        commentId: 'comment-123',
-      };
 
       // Action
-      const isLiked = await commentRepositoryPostgres.checkWhetherCommentIsLikedOrNot(payload);
+      const isLiked = await commentRepositoryPostgres.checkWhetherCommentIsLikedOrNot(
+        'user-123',
+        'comment-123'
+      );
 
       // Assert
       expect(isLiked).toBe(false);

@@ -74,10 +74,8 @@ class CommentRepositoryPostgres extends CommentRepository {
     await this._pool.query(query);
   }
 
-  async addLikesToComment(payload) {
-    const { userId, commentId } = payload;
+  async addLikesToComment(userId, commentId) {
     const id = `comment-likes-${this._idGenerator()}`;
-
     const query = {
       text: 'INSERT INTO comment_with_likes VALUES($1, $2, $3) RETURNING id, user_id, comment_id',
       values: [id, commentId, userId],
@@ -87,8 +85,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     return new AddedLikesToComment(result.rows[0]);
   }
 
-  async removeLikesFromComment(payload) {
-    const { userId, commentId } = payload;
+  async removeLikesFromComment(userId, commentId) {
     const query = {
       text: 'DELETE FROM comment_with_likes WHERE user_id = $1 AND comment_id = $2',
       values: [userId, commentId],
@@ -97,8 +94,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     await this._pool.query(query);
   }
 
-  async checkWhetherCommentIsLikedOrNot(payload) {
-    const { userId, commentId } = payload;
+  async checkWhetherCommentIsLikedOrNot(userId, commentId) {
     const query = {
       text: 'SELECT * FROM comment_with_likes WHERE user_id = $1 AND comment_id = $2',
       values: [userId, commentId],
