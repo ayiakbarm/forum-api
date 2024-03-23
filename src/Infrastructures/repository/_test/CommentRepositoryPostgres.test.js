@@ -142,6 +142,17 @@ describe('CommentRepositoryPostgres interface', () => {
         thread: 'thread-123',
       });
 
+      const expectedDetailCommentThread = [
+        {
+          id: 'comment-123',
+          username: 'dicoding',
+          date: new Date('2024-03-23T05:44:14.624Z'),
+          content: 'sebuah comment',
+          is_delete: false,
+          likeCount: 0,
+        },
+      ];
+
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       // Action
@@ -150,11 +161,7 @@ describe('CommentRepositoryPostgres interface', () => {
       );
       // Assert
       expect(Array.isArray(detailCommentThread)).toBe(true);
-      expect(detailCommentThread[0].id).toEqual('comment-123');
-      expect(detailCommentThread[0].username).toEqual('dicoding');
-      expect(detailCommentThread[0].content).toEqual('sebuah comment');
-      expect(detailCommentThread[0].is_delete).toEqual(false);
-      expect(detailCommentThread[0].date).not.toBeNull();
+      expect(expectedDetailCommentThread).toStrictEqual(detailCommentThread);
     });
   });
 
