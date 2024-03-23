@@ -2,6 +2,7 @@ const CommentRepository = require('../../Domains/comments/CommentRepository');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const AddedLikesToComment = require('../../Domains/comments/entities/AddedLikesToComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -22,7 +23,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     };
 
     const result = await this._pool.query(query);
-    return new AddedComment({ ...result.rows[0] });
+    return new AddedComment(result.rows[0]);
   }
 
   async checkAvailabilityComment(commentId) {
@@ -51,7 +52,8 @@ class CommentRepositoryPostgres extends CommentRepository {
   async getDetailCommentThread(thread) {
     const query = {
       text: `
-      SELECT comments.id, username, created_at as date, content, is_delete
+      SELECT comments.id, username, created_at as date, content, is_delete,
+      (SELECT CAST(COUNT(*) AS INTEGER) FROM comment_with_likes WHERE comment_with_likes.comment_id = comments.id) AS "likeCount"
       FROM comments
       LEFT JOIN users ON users.id = comments.owner
       WHERE thread = $1
@@ -71,6 +73,38 @@ class CommentRepositoryPostgres extends CommentRepository {
     };
 
     await this._pool.query(query);
+  }
+
+  async addLikesToComment(userId, commentId) {
+    const id = `comment-likes-${this._idGenerator()}`;
+    const query = {
+      text: 'INSERT INTO comment_with_likes VALUES($1, $2, $3) RETURNING id, user_id, comment_id',
+      values: [id, commentId, userId],
+    };
+
+    const result = await this._pool.query(query);
+    return new AddedLikesToComment(result.rows[0]);
+  }
+
+  async removeLikesFromComment(userId, commentId) {
+    const query = {
+      text: 'DELETE FROM comment_with_likes WHERE user_id = $1 AND comment_id = $2',
+      values: [userId, commentId],
+    };
+
+    await this._pool.query(query);
+  }
+
+  async checkWhetherCommentIsLikedOrNot(userId, commentId) {
+    const query = {
+      text: 'SELECT * FROM comment_with_likes WHERE user_id = $1 AND comment_id = $2',
+      values: [userId, commentId],
+    };
+
+    const result = await this._pool.query(query);
+    if (result.rowCount === 0) return false;
+
+    return true;
   }
 }
 

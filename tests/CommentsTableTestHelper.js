@@ -8,7 +8,7 @@ const CommentsTableTestHelper = {
     is_delete = false,
     owner = 'user-123',
     thread = 'thread-123',
-    date = new Date().toISOString(),
+    date = '2024-03-23T05:44:14.624Z',
   }) {
     const query = {
       text: 'INSERT INTO comments(id, content, is_delete, owner, thread, created_at) VALUES($1, $2, $3, $4, $5, $6) RETURNING id, content, owner',
