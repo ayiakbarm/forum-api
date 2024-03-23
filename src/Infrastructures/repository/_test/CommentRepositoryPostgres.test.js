@@ -245,4 +245,57 @@ describe('CommentRepositoryPostgres interface', () => {
       expect(commentWithLikes).toHaveLength(0);
     });
   });
+
+  describe('checkWhetherCommentIsLikedOrNot function', () => {
+    it('should return true if comment are liked ', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        thread: 'thread-123',
+        owner: 'user-123',
+      });
+      await CommentWithLikesTableTestHelper.addCommentLikes({
+        id: 'comment-likes-123',
+        userId: 'user-123',
+        commentId: 'comment-123',
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const payload = {
+        userId: 'user-123',
+        commentId: 'comment-123',
+      };
+
+      // Action
+      const isLiked = await commentRepositoryPostgres.checkWhetherCommentIsLikedOrNot(payload);
+
+      // Assert
+      expect(isLiked).toBe(true);
+    });
+
+    it('should return false if comment are not liked', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({ id: 'user-123' });
+      await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        thread: 'thread-123',
+        owner: 'user-123',
+      });
+
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+      const payload = {
+        userId: 'user-123',
+        commentId: 'comment-123',
+      };
+
+      // Action
+      const isLiked = await commentRepositoryPostgres.checkWhetherCommentIsLikedOrNot(payload);
+
+      // Assert
+      expect(isLiked).toBe(false);
+    });
+  });
 });
